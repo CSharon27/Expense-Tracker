@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | AlmiTrack Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .settings-section {
+            margin-bottom: 3rem;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 12px;
+            background-color: var(--gray-200);
+            border-radius: 6px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .progress-container {
+            background-color: var(--gray-700);
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary);
+            transition: width 0.5s ease, background-color 0.3s;
+        }
+
+        .progress-warning {
+            background-color: var(--warning);
+        }
+
+        .progress-danger {
+            background-color: var(--danger);
+        }
+
+        .export-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2 style="color: var(--primary);"><i class="fas fa-wallet"></i> AlmiTrack</h2>
+            </div>
+
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="add.html" class="nav-link">
+                    <i class="fas fa-plus-circle"></i> Add Transaction
+                </a>
+                <a href="reports.html" class="nav-link">
+                    <i class="fas fa-file-invoice-dollar"></i> Reports
+                </a>
+                <a href="settings.html" class="nav-link active">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+
+            <div style="margin-top: auto;">
+                <button id="theme-toggle" class="nav-link" style="width: 100%; border: 1px solid var(--border-color);">
+                    <i id="theme-toggle-icon" class="fas fa-moon"></i> <span>Appearance</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="margin-bottom: 2.5rem;">
+                <h1 style="font-size: 2rem;">Settings & Budget</h1>
+                <p style="color: var(--text-muted);">Manage your financial goals and preferences</p>
+            </header>
+
+            <!-- Budget Management -->
+            <section class="settings-section fade-in">
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-bullseye"
+                            style="color: var(--primary); margin-right: 0.5rem;"></i> Monthly Budget</h3>
+                    <div style="display: flex; gap: 1rem; align-items: flex-end;">
+                        <div style="flex: 1;">
+                            <label style="font-size: 0.85rem; margin-bottom: 0.5rem; display: block;">Set Goal</label>
+                            <input type="number" id="budget-amount" placeholder="2000.00"
+                                style="font-size: 1.25rem; font-weight: 600;">
+                        </div>
+                        <button id="save-budget" class="btn btn-primary">Save Budget</button>
+                    </div>
+
+                    <div style="margin-top: 2.5rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-weight: 500;">Spending Progress</span>
+                            <span id="budget-percent" style="font-weight: 600;">0%</span>
+                        </div>
+                        <div class="progress-container">
+                            <div id="budget-progress-bar" class="progress-bar"></div>
+                        </div>
+                        <p id="budget-status-text" style="font-size: 0.85rem; color: var(--text-muted);">
+                            You've spent $0.00 of your $2000.00 budget.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Management / Export -->
+            <section class="settings-section fade-in" style="animation-delay: 0.1s;">
+                <h3 style="margin-bottom: 1.5rem;"><i class="fas fa-database"
+                        style="color: var(--success); margin-right: 0.5rem;"></i> Data Management</h3>
+
+                <div class="export-card">
+                    <div>
+                        <h4 style="margin-bottom: 0.25rem;">Export to CSV</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Download all your transactions in a
+                            spreadsheet-friendly format.</p>
+                    </div>
+                    <button id="export-csv" class="btn btn-outline" style="min-width: 140px;">
+                        <i class="fas fa-file-csv"></i> Export Data
+                    </button>
+                </div>
+
+                <div class="export-card" style="border-color: rgba(239, 68, 68, 0.2);">
+                    <div>
+                        <h4 style="margin-bottom: 0.25rem;">Clear All Data</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Permanently delete all transactions and
+                            reset your settings.</p>
+                    </div>
+                    <button id="clear-data" class="btn btn-outline"
+                        style="color: var(--danger); border-color: var(--danger);">
+                        <i class="fas fa-trash-can"></i> Reset App
+                    </button>
+                </div>
+            </section>
+
+            <!-- Preferences (Theme etc) moved here from Sidebar on mobile -->
+            <section class="settings-section fade-in" style="animation-delay: 0.2s; display: none;"
+                id="mobile-preferences">
+                <h3 style="margin-bottom: 1.5rem;">Preferences</h3>
+                <div class="card">
+                    <button id="theme-toggle-mobile" class="btn btn-outline"
+                        style="width: 100%; justify-content: flex-start;">
+                        <i class="fas fa-moon"></i> Toggle Dark Mode
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Mobile Bottom Nav -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i></a>
+            <a href="dashboard.html" class="nav-link"><i class="fas fa-chart-line"></i></a>
+            <a href="add.html" class="nav-link"><i class="fas fa-plus-circle"></i></a>
+            <a href="reports.html" class="nav-link"><i class="fas fa-file-invoice-dollar"></i></a>
+            <a href="settings.html" class="nav-link active"><i class="fas fa-cog"></i></a>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof SettingsController !== 'undefined') {
+                SettingsController.init();
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Transaction | AlmiTrack Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            font-family: inherit;
+            transition: 0.2s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .type-toggle {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .type-btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            border: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .type-btn.active[data-type="income"] {
+            border-color: var(--success);
+            background-color: rgba(16, 185, 129, 0.05);
+            color: var(--success);
+        }
+
+        .type-btn.active[data-type="expense"] {
+            border-color: var(--danger);
+            background-color: rgba(239, 68, 68, 0.05);
+            color: var(--danger);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2 style="color: var(--primary);"><i class="fas fa-wallet"></i> AlmiTrack</h2>
+            </div>
+
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="add.html" class="nav-link active">
+                    <i class="fas fa-plus-circle"></i> Add Transaction
+                </a>
+                <a href="reports.html" class="nav-link">
+                    <i class="fas fa-file-invoice-dollar"></i> Reports
+                </a>
+                <a href="settings.html" class="nav-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+
+            <div style="margin-top: auto;">
+                <button id="theme-toggle" class="nav-link" style="width: 100%; border: 1px solid var(--border-color);">
+                    <i id="theme-toggle-icon" class="fas fa-moon"></i> <span>Appearance</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="margin-bottom: 2.5rem;">
+                <h1 style="font-size: 2rem;">Add Transaction</h1>
+                <p style="color: var(--text-muted);">Record a new income or expense</p>
+            </header>
+
+            <div class="card fade-in" style="max-width: 600px; margin: 0 auto;">
+                <form id="transaction-form">
+                    <div class="type-toggle">
+                        <button type="button" class="type-btn active" data-type="expense">
+                            <i class="fas fa-arrow-trend-down"></i>
+                            Expense
+                        </button>
+                        <button type="button" class="type-btn" data-type="income">
+                            <i class="fas fa-arrow-trend-up"></i>
+                            Income
+                        </button>
+                        <input type="hidden" id="transaction-type" value="expense">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Amount ($)</label>
+                        <input type="number" id="amount" placeholder="0.00" step="0.01" required min="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" required>
+                            <!-- Options will be dynamic based on type -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="note">Note (Optional)</label>
+                        <textarea id="note" rows="3" placeholder="What was this for?"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; padding: 1rem; font-size: 1.1rem; margin-top: 1rem;">
+                        Save Transaction
+                    </button>
+                </form>
+            </div>
+        </main>
+
+        <!-- Mobile Bottom Nav -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i></a>
+            <a href="dashboard.html" class="nav-link"><i class="fas fa-chart-line"></i></a>
+            <a href="add.html" class="nav-link active"><i class="fas fa-plus-circle"></i></a>
+            <a href="reports.html" class="nav-link"><i class="fas fa-file-invoice-dollar"></i></a>
+            <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i></a>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof AddTransactionController !== 'undefined') {
+                AddTransactionController.init();
+            }
+        });
+    </script>
+</body>
+
+</html>

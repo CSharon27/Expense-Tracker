@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports | AlmiTrack Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: var(--bg-card);
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-card {
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto !important;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h2 style="color: var(--primary);"><i class="fas fa-wallet"></i> AlmiTrack</h2>
+            </div>
+
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="add.html" class="nav-link">
+                    <i class="fas fa-plus-circle"></i> Add Transaction
+                </a>
+                <a href="reports.html" class="nav-link active">
+                    <i class="fas fa-file-invoice-dollar"></i> Reports
+                </a>
+                <a href="settings.html" class="nav-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+
+            <div style="margin-top: auto;">
+                <button id="theme-toggle" class="nav-link" style="width: 100%; border: 1px solid var(--border-color);">
+                    <i id="theme-toggle-icon" class="fas fa-moon"></i> <span>Appearance</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="margin-bottom: 2.5rem;">
+                <h1 style="font-size: 2rem;">Financial Reports</h1>
+                <p style="color: var(--text-muted);">Analyze your spending and income trends</p>
+            </header>
+
+            <!-- Filters -->
+            <div class="filter-bar fade-in">
+                <div class="filter-group">
+                    <label style="font-size: 0.8rem; margin-bottom: 0.3rem; display: block;">Time Period</label>
+                    <select id="filter-period">
+                        <option value="all">All Time</option>
+                        <option value="this-month" selected>This Month</option>
+                        <option value="last-month">Last Month</option>
+                        <option value="this-year">This Year</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label style="font-size: 0.8rem; margin-bottom: 0.3rem; display: block;">Category</label>
+                    <select id="filter-category">
+                        <option value="all">All Categories</option>
+                        <!-- Dynamic categories -->
+                    </select>
+                </div>
+                <div class="filter-group" style="flex: 0; min-width: auto; display: flex; align-items: flex-end;">
+                    <button id="apply-filters" class="btn btn-outline" style="padding: 0.6rem 1rem;">
+                        <i class="fas fa-filter"></i> Apply
+                    </button>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="chart-container fade-in" style="animation-delay: 0.1s;">
+                <div class="card chart-card">
+                    <h3 style="margin-bottom: 1.5rem; align-self: flex-start;">Expenses by Category</h3>
+                    <canvas id="pieChart" width="300" height="300"></canvas>
+                    <div id="pie-legend" class="legend"></div>
+                </div>
+                <div class="card chart-card">
+                    <h3 style="margin-bottom: 1.5rem; align-self: flex-start;">Income vs Expenses</h3>
+                    <canvas id="barChart" width="300" height="300"></canvas>
+                    <div id="bar-legend" class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: var(--success);"></div> Income
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: var(--danger);"></div> Expenses
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Summary -->
+            <div class="card fade-in" style="animation-delay: 0.2s;">
+                <h3 style="margin-bottom: 1.5rem;">Report Summary</h3>
+                <div id="report-summary-text" style="color: var(--text-muted); line-height: 1.8;">
+                    <!-- Dynamic summary text -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Mobile Bottom Nav -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i></a>
+            <a href="dashboard.html" class="nav-link"><i class="fas fa-chart-line"></i></a>
+            <a href="add.html" class="nav-link"><i class="fas fa-plus-circle"></i></a>
+            <a href="reports.html" class="nav-link active"><i class="fas fa-file-invoice-dollar"></i></a>
+            <a href="settings.html" class="nav-link"><i class="fas fa-cog"></i></a>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof ReportsController !== 'undefined') {
+                ReportsController.init();
+            }
+        });
+    </script>
+</body>
+
+</html>
